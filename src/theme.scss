@@ -1,0 +1,63 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$desktop: 840px;
+$small: 400px;
+
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media (max-width: #{$small}) {
+    @content;
+  }
+}
+
+$background: #E5E5E5;
+
+// Colors
+$colors: (
+  primary: mat-palette($mat-blue),
+  accent: mat-palette($mat-amber, 100),
+  warn: mat-palette($mat-red),
+
+  primary-light: mat-palette($mat-blue, 300),
+  primary-dark: mat-palette($mat-blue, 700),
+
+);
+
+@function colorTheme($color-name) {
+  @return map-get($colors, $color-name)
+};
+
+@function color($color-name) {
+  @return mat-color(map-get($colors, $color-name))
+};
+
+$theme: mat-light-theme(colorTheme(primary), colorTheme(accent), colorTheme(warn));
+
+@include angular-material-theme($theme);
+
+.raised_button {
+  height: 4rem;
+  width: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: $background;
+  box-shadow:  13px 13px 26px #c3c3c3,
+             -13px -13px 26px #ffffff;
+}
+
+.raised_button:active {
+  border-radius: 50%;
+  background: $background;
+  box-shadow: inset 13px 13px 26px #c3c3c3,
+            inset -13px -13px 26px #ffffff;
+
+}

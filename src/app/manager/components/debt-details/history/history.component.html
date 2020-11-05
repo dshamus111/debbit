@@ -1,0 +1,13 @@
+<div class="container" *ngIf="history && history.length > 0 else no_history">
+  <div class="container__item" *ngFor="let item of history">
+    <p>{{item.amount | currency}}</p>
+    <p>{{item.description !== '' ? item.description : 'No Description'}}</p>
+    <p>{{item.approved === true ? 'Approved' : 'Pending'}}</p>
+  </div>
+</div>
+
+<ng-template #no_history>
+  <div class="no_history">
+    <h2>No history</h2>
+  </div>
+</ng-template>

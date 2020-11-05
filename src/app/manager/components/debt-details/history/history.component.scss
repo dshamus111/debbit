@@ -1,0 +1,17 @@
+.container {
+  height: 100%;
+
+  &__item {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.no_history {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

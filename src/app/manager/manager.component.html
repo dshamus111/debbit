@@ -1,0 +1,32 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav class="drawer" mode="side" position="end" [opened]="(debtService.selectedDebt$ | async) !== null ? true : false">
+    <app-debt-details  [viewMode]="viewMode"></app-debt-details>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main">
+    <div class="main__content">
+      <div class="main__header">
+        <a class="main__back raised_button" (click)="auth.signOut()"><mat-icon>meeting_room</mat-icon></a>
+        <img class="profile_picture" src="{{(auth.user$ | async)?.photoURL}}" alt="Profile picture" height="50px" width="50px">
+      </div>
+
+      <mat-tab-group class="main__tabs" headerPosition="below" mat-stretch-tabs dynamicHeight="true">
+        <mat-tab label="I Owe U">
+          <div class="tab-content" *ngIf="owes$ | async as owes">
+            <app-debt-item *ngFor="let debt of owes" [debt]="debt" (click)="debtService.loadDebt(debt.uid); loadViewMode('IOWE')"></app-debt-item>
+          </div>
+      </mat-tab>
+
+      <mat-tab  label="U Owe Me">
+        <div class="tab_content">
+          <div class="tab-content" *ngIf="owed$ | async as owed">
+            <app-debt-item *ngFor="let debt of owed" [debt]="debt" (click)="debtService.loadDebt(debt.uid); loadViewMode('UOWE')"></app-debt-item>
+          </div>
+        </div>
+      </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <a class="main__add raised_button" (click)="openAddWindow()"><mat-icon>add</mat-icon></a>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="container__top">
+    <span class="spacer"></span>
+    <h3 class="title"><strong>I Owe</strong></h3>
+    <a class="switch"><span class="switch__text">Switch to <br>date</span><mat-icon>refresh</mat-icon></a>
+  </div>
+
+  <form class="container__center" [formGroup]="debtForm">
+    <mat-form-field class="person">
+      <input matInput placeholder="Person" formControlName="owed_to">
+    </mat-form-field>
+    <mat-form-field class="amount">
+      <input matInput placeholder="Amount" formControlName="total_amount_owed">
+    </mat-form-field>
+    <p>over</p>
+    <div class="payment">
+      <mat-form-field>
+        <input matInput class="number" placeholder="# of Payments" formControlName="number_of_payments">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="payment_period" placeholder="Period">
+          <mat-option *ngFor="let period of periods" [value]="period">
+            {{period}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <p>payment(s) for</p>
+    <mat-form-field class="debt_name">
+      <input matInput placeholder="Debt Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="description">
+      <textarea matInput placeholder="Description" formControlName="description"></textarea>
+    </mat-form-field>
+  </form>
+
+  <div class="container__bottom">
+    <a class="raised_button cancel" (click)="close()">Cancel</a>
+    <a class="raised_button submit" (click)="createDebt(debtForm); close()">Add Debt</a>
+  </div>
+</div>

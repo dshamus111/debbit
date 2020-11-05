@@ -1,0 +1,99 @@
+<div class="container" *ngIf="debt">
+  <header class="header">
+    <a class="header__square raised_button" (click)="clear()"><mat-icon>close</mat-icon></a>
+    <h3>{{debt.name}}</h3>
+    <a class="header__square raised_button" *ngIf="viewMode === 'UOWE' else spacer" [matMenuTriggerFor]="options"><mat-icon>more_horiz</mat-icon></a>
+    <ng-template #spacer><a class="header__square raised_button" style="visibility: hidden;"></a></ng-template>
+  </header>
+
+  <div class="payment" [ngSwitch]="viewMode">
+    <ng-container *ngSwitchCase="'IOWE'">
+      <div class="payment__container">
+        <ng-container *ngIf="debt.total_amount_owed - debt.amount_paid > 0 || debt.complete === false else complete">
+          <div class="contents" >
+            <h2 id="upper">{{amount | currency}}</h2>
+            <div id="lower">
+              <p>out of <br>{{debt.total_amount_owed - debt.amount_paid | currency}}</p>
+            </div>
+          </div>
+          <app-radial-dial [numerator]="debt.payment_amount" [denominator]="debt.total_amount_owed - debt.amount_paid" (amount)="updateAmount($event)"></app-radial-dial>
+        </ng-container>
+        <ng-template #complete><h1>Debt Paid!</h1></ng-template>
+      </div>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'UOWE'">
+
+      <div class="payment__status">
+        <p class="label">Amount left</p>
+        <h1 class="label">{{debt.total_amount_owed - debt.amount_paid | currency}}</h1>
+        <div class="contents">
+          <div class="pending" *ngIf="history && history.length > 0 else none">
+            <h3 class="label">Pending Payment</h3>
+            <h3 class="label">{{history[0].amount | currency}}</h3>
+          </div>
+          <ng-template class="pending" #none>
+            <h3 class="label">No Pending <br> Payments</h3>
+          </ng-template>
+          <div class="progress">
+            <div class="progress__labels"><label>0</label> <label>{{debt.total_amount_owed | currency}}</label></div>
+            <div class="progress__bar">
+              <div class="progress__amount"
+              [ngStyle]="determineProgressAmount()">
+              &nbsp;
+              </div>
+              <div *ngIf="history && history.length > 0 else placeholder" class="progress__pending" [ngStyle]="determinePendingProgress(history[0].amount)">&nbsp;</div>
+              <ng-template #placeholder><div class="progress__pending" [ngStyle]="determinePendingProgress(0)">&nbsp;</div></ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <div class="tab-container">
+  <mat-tab-group mat-stretch-tabs dynamicHeight="true">
+    <mat-tab label="Details">
+      <div class="info">
+        <div class="info__line"><p>Next Payment <br>Date</p> <p>{{debt.next_payment ? (debt.next_payment.toDate() | date: 'MMMM d') : 'None'}}</p></div>
+        <div class="info__line"><p>Amount Due</p> <p>{{debt.payment_amount < 0 ? (0 | currency) : debt.payment_amount | currency}}</p></div>
+        <div class="info__line">
+          <p>Payment Period</p><p>{{debt.payment_period | titlecase}}</p></div>
+        <div class="info__line"><p>Payments Left</p> <p>{{debt.number_of_payments}}</p></div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="History">
+      <app-history [history]="history" class="history"></app-history>
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+
+  <footer class="footer" *ngIf="viewMode === 'IOWE' else Uowe">
+    <a class="footer__history raised_button" style="visibility: hidden;"></a>
+    <a class="footer__accept raised_button" (click)="openTransactionDialog()" *ngIf="debt.complete === false else complete">Pay {{amount | currency}}</a>
+    <ng-template #complete><a  class="footer__accept raised_button" (click)="clear()">Close</a></ng-template>
+    <a class="footer__history raised_button"><mat-icon>history</mat-icon></a>
+  </footer>
+
+  <ng-template #Uowe>
+    <footer class="footer">
+      <a class="footer__history raised_button" style="visibility: hidden;"></a>
+      <a *ngIf="history && history.length > 0 else notify" class="footer__accept raised_button" (click)="confirmPayment(history[0])">
+        Accept {{history[0].amount | currency}}
+      </a>
+      <ng-template #notify>
+        <a class="footer__accept raised_button">Notify</a>
+      </ng-template>
+      <a class="footer__history raised_button"><mat-icon>history</mat-icon></a>
+    </footer>
+  </ng-template>
+
+</div>
+
+<mat-menu #options>
+  <button mat-menu-item>Edit</button>
+  <button mat-menu-item>Delete</button>
+</mat-menu>

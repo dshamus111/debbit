@@ -1,0 +1,16 @@
+<div class="wrapper" #dial>
+  <div class="dial-container container1">
+    <div class="wedge" #wedge1></div>
+  </div>
+  <div class="dial-container container2">
+    <div class="wedge" #wedge2></div>
+  </div>
+  <div class="marker start"></div>
+  <div
+  #point
+  class="marker point end"
+  (panstart)="onPress($event)"
+  (panmove)="updateAmount($event)"
+  (panend)="updateAngle()"
+  ></div>
+</div>

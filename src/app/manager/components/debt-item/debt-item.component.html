@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="container__left">
+    <h3>{{debt.name}}</h3>
+  </div>
+
+  <div class="container__center">
+    <img src="{{debt.owed_to.photoURL}}" class="owed_pic">
+    <br>
+    <p>{{debt.owed_to.displayName}}</p>
+  </div>
+
+  <div class="container__right" *ngIf="debt.complete === false else complete">
+    <p>{{debt.payment_amount < 0 ? (0 | currency) : (debt.payment_amount | currency)}}</p>
+    <p id="due_date" *ngIf="debt.debt_end > now else past_due">Due {{debt.next_payment ? (debt.next_payment | date: 'MMMM d') : ''}}</p>
+    <ng-template #past_due><p id="due_date" style="color: red;">Past Due!</p></ng-template>
+  </div>
+  <ng-template #complete>
+    <div class="container__right">
+      <p>Paid!</p>
+    </div>
+  </ng-template>
+</div>

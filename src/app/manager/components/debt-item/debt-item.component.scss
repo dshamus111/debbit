@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &__left {
+    flex: 1;
+
+    h3 {
+      text-align: center;
+    }
+  }
+
+  &__center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      text-align: center;
+      margin: 0;
+    }
+
+    .owed_pic {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  }
+  &__right {
+    flex: 1;
+
+    p {
+      text-align: center;
+      margin: 0;
+    }
+
+    #due_date {
+      font-size: .8em;
+      color: gray;
+    }
+  }
+
+}
